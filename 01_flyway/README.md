@@ -81,10 +81,10 @@ This will automatically run Flyway migrations and execute tests
 The app has two REST endpoints where one can test the data on thje database on profiles dev and prod
 
 Getting a list of all users
-![List of users](/documentation/users_list.png)
+![List of users](documentation/users_list.png)
 
 Getting a message of a user
-![Message of a user](/documentation/users_list.png)
+![Message of a user](documentation/users_list.png)
 
 
 # References
