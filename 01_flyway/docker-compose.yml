@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db_dev:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: pass1
+      POSTGRES_USER: admin1
+    ports:
+      - "65432:5432"
+  db_prod:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: pass2
+      POSTGRES_USER: admin2
+    ports:
+      - "65433:5432"  
+  db_test:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: pass3
+      POSTGRES_USER: admin3
+    ports:
+      - "65434:5432"
