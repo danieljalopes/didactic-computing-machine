@@ -9,7 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+
 
 @Data
 @Entity
@@ -26,7 +29,8 @@ public class Message implements Serializable{
 	private Integer messageId;
 
 	private String text;
-
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "e_user")
 	private User user;

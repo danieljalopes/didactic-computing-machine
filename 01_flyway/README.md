@@ -70,7 +70,6 @@ All the follwoing steps must be runned under 01_Flyway/flyway-demo folder
 .\gradlew bootRunProd
 ````
 
-
 ## Testing
 Just run 
 ````
@@ -78,7 +77,19 @@ Just run
 ````
 This will automatically run Flyway migrations and execute tests
 
+## Using the webappp
+The app has two REST endpoints where one can test the data on thje database on profiles dev and prod
+
+Getting a list of all users
+![List of users](/documentation/users_list.png)
+
+Getting a message of a user
+![Message of a user](/documentation/users_list.png)
+
 
 # References
 https://flywaydb.org/documentation
+
 https://www.baeldung.com/database-migrations-with-flyway
+
+https://flywaydb.org/blog/organising-your-migrations
