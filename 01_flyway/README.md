@@ -48,12 +48,17 @@ docker-compose up -d
 ````
 This will launch 3 databases dedicated to it's own environment: testing (test), development (dev) and production (prod)
 
+## Databases URL Connections
+- test: localhost:65434
+- dev: localhost:65432
+- prod: localhost:65433
+
 ## Start web app
 All the follwoing steps must be runned under 01_Flyway/flyway-demo folder
 ### Profile DEV
 1. Run Flyway migrations:
 ````
-.\gradlew -DFlyway.configFiles=.\migrations\dev\Flyway.conf FlywayMigrate
+.\gradlew -Dflyway.configFiles=.\migrations\dev\Flyway.conf FlywayMigrate
 ````
 2. Start webapp:
 ````
@@ -63,7 +68,7 @@ All the follwoing steps must be runned under 01_Flyway/flyway-demo folder
 ### Profile PROD
 1. Run Flyway migrations:
 ````
-.\gradlew -DFlyway.configFiles=.\migrations\prod\Flyway.conf FlywayMigrate
+.\gradlew -Dflyway.configFiles=.\migrations\prod\Flyway.conf FlywayMigrate
 ````
 2. Start webapp:
 ````
@@ -95,3 +100,5 @@ https://flywaydb.org/documentation
 https://www.baeldung.com/database-migrations-with-flyway
 
 https://flywaydb.org/blog/organising-your-migrations
+
+https://dbabulletin.com/index.php/2018/03/29/best-practices-using-flyway-for-database-migrations/
