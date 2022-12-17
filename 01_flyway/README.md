@@ -31,10 +31,12 @@ Flyway supports the following basic commands to manage database migrations:
 - Repair: Repairs metadata table.
 - Clean: Drops all objects in a configured schema. Of course, we should never use clean on any production database.
 
-## How Flyway works
 
 # The demo project
 This is a simple Spring Boot 2 application that is configured to work in 3 profiles testing (test), development (dev) and production (prod).
+
+The following image describes the main elements needed for the correct project setup
+![Project Setup](documentation/project_setup.png)
 
 ## Test environment
 
