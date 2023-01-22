@@ -1,0 +1,53 @@
+openapi: "3.0.1"
+info:
+  title: "my-api"
+  version: "2022-11-16T22:15:11Z"
+servers:
+- url: / #because url is only knonwn after deploy
+  variables:
+    basePath:
+      default: "/test"
+      
+paths:
+  /adas:
+    post:
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${get_lambda_arn}/invocations"
+        httpMethod: "POST"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+  /lidar:
+    post:
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${get_lambda_arn}/invocations"
+       
+        httpMethod: "POST"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"      
+components:
+  schemas:
+    Empty:
+      title: "Empty Schema"
+      type: "object"
