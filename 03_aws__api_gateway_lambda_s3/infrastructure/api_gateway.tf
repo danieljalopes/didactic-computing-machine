@@ -15,7 +15,7 @@ data "template_file" "api_gw_config_file" {
 
 }
 /**
-Create AWS API GATEWAY v2
+Create AWS API GATEWAY
 */
 resource "aws_api_gateway_rest_api" "nem_egress_api" {
   name = "nem-egress-api"
@@ -27,6 +27,7 @@ resource "aws_api_gateway_rest_api" "nem_egress_api" {
   }
 }
 
+#Integrate API Gateway with Lambda
 resource "aws_lambda_permission" "apigw" {
 	action        = "lambda:InvokeFunction"
 	function_name = aws_lambda_function.systems_redirection.arn
@@ -35,6 +36,7 @@ resource "aws_lambda_permission" "apigw" {
 	source_arn = "${aws_api_gateway_rest_api.nem_egress_api.execution_arn}/*/*"
 }
 
+#Create API Stage
 resource "aws_api_gateway_stage" "nem_egress_api" {
   deployment_id = aws_api_gateway_deployment.nem_egress_api.id
   rest_api_id   = aws_api_gateway_rest_api.nem_egress_api.id
@@ -42,6 +44,7 @@ resource "aws_api_gateway_stage" "nem_egress_api" {
   
 }
 
+#Deploy API Gateway do Stage
 resource "aws_api_gateway_deployment" "nem_egress_api" {
   rest_api_id = aws_api_gateway_rest_api.nem_egress_api.id
 

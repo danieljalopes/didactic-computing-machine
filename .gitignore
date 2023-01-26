@@ -1,0 +1,6 @@
+03_aws__api_gateway_lambda_s3/apps/producer/gradle/
+03_aws__api_gateway_lambda_s3/infrastructure/.terraform.lock.hcl
+03_aws__api_gateway_lambda_s3/infrastructure/terraform.tfstate
+03_aws__api_gateway_lambda_s3/infrastructure/terraform.tfstate.backup
+03_aws__api_gateway_lambda_s3/infrastructure/.terraform/
+03_aws__api_gateway_lambda_s3/documentation/.$schematics.drawio.bkp
