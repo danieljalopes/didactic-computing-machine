@@ -16,7 +16,7 @@ import com.example.car_producer.data_sender.LidarDataSender;
 @Component
 public class ApplicationStart {
 	
-	String resourceUrl = "https://xxxxxxxxx.execute-api.eu-west-1.amazonaws.com/production";
+	String resourceUrl = "https://xxxxxxx.execute-api.eu-west-1.amazonaws.com/production";
 	
 	String lidarEndpoint = "lidar";
 	String fullUrlLidar = resourceUrl + "/" + lidarEndpoint;
