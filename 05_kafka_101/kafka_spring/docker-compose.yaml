@@ -1,0 +1,123 @@
+version: "3.9"
+
+services:
+  
+  akhq:
+    image: tchiotludo/akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+              #schema-registry:
+              #  url: "http://schema-registry:8085"
+              #connect:
+              #  - name: "connect"
+              #    url: "http://connect:8083"
+    ports:
+      - 8080:8080
+    links:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    networks:
+    - kafka_network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+    - kafka_network
+
+  kafka-1:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - "9092" # for internal kafka_network access, labeled as INTERNAL
+      - "19091:19091" # for external kafka_network but same host, labeled EXTERNAL_SAME_HOST
+    environment:
+      KAFKA_BROKER_ID: 1
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL_SAME_HOST://:19091
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL_SAME_HOST://localhost:19091
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL_SAME_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_NUM_PARTITIONS: 3
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka_network
+
+  kafka-2:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - "9092" # for internal kafka_network access, labeled as INTERNAL
+      - "29091:29091" # for external kafka_network but same host, labeled EXTERNAL_SAME_HOST
+    environment:
+      KAFKA_BROKER_ID: 2
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL_SAME_HOST://:29091
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:9092,EXTERNAL_SAME_HOST://localhost:29091
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL_SAME_HOST:PLAINTEXT
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka_network    
+
+  kafka-3:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - "9092" # for internal kafka_network access, labeled as INTERNAL
+      - "39091:39091" # for external kafka_network but same host, labeled EXTERNAL_SAME_HOST
+    environment:
+      KAFKA_BROKER_ID: 3
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL_SAME_HOST://:39091
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:9092,EXTERNAL_SAME_HOST://localhost:39091
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL_SAME_HOST:PLAINTEXT
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    depends_on:
+      - zookeeper
+    networks:
+     - kafka_network
+
+# just to setup kafka
+# starts, creates topics, then exits
+  init-kafka:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: [ '/bin/bash', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics.sh --bootstrap-server kafka-1:9092 --list
+      echo -e 'Creating kafka topics'
+      kafka-topics.sh --bootstrap-server kafka-1:9092 --create --if-not-exists --topic ADAS
+      kafka-topics.sh --bootstrap-server kafka-1:9092 --create --if-not-exists --topic LIDAR
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics.sh --bootstrap-server kafka-1:9092 --list
+      "
+    depends_on:
+      - kafka-1
+    networks:
+     - kafka_network
+
+networks:
+  kafka_network:
+    name: kafka_spring_network
+
+

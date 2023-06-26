@@ -1,0 +1,5 @@
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:19091
+    consumer:
+      group-id: car-group
