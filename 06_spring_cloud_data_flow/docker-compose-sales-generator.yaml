@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  sales-generator:
+    container_name: sales-generator
+    
+    build:
+      context: ./sales-generator/build/docker
+    ports:
+      - "8082:8081"
+    networks:
+      - scdf
+
+
+networks:
+  scdf:
